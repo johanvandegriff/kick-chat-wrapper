@@ -10,8 +10,8 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-const (
-	APIURL = "wss://ws-us2.pusher.com/app/eb1d5f283081a78b932c?protocol=7&client=js&version=7.6.0&flash=false"
+var (
+	APIURL = "wss://ws-us2.pusher.com/app/32cbd69e4b950bf97679?protocol=7&client=js&version=8.4.0-rc2&flash=false"
 )
 
 type Client struct {
@@ -97,7 +97,7 @@ func (client *Client) reconnect() error {
 	client.ws = ws
 	client.joinedChannels = make(map[int]bool)
 
-	for id, _ := range previousChannels {
+	for id := range previousChannels {
 		joinErr := client.JoinChannelByID(id)
 		if joinErr != nil {
 			return joinErr
@@ -166,12 +166,12 @@ func (client *Client) JoinChannelByID(id int) error {
 
 	msg, marshalErr := json.Marshal(pusherSubscribe)
 	if marshalErr != nil {
-		return errors.New("Marshal error")
+		return errors.New("marshal error")
 	}
 
 	err := client.ws.WriteMessage(websocket.TextMessage, []byte(msg))
 	if err != nil {
-		return errors.New("Error joining channel")
+		return errors.New("error joining channel")
 	}
 
 	client.joinedChannels[id] = true
